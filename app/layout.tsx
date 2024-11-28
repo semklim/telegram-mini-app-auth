@@ -1,6 +1,15 @@
+
+// import TgMiniApp from "@/components/TgMiniApp/TgMiniApp";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
+import { Suspense } from "react";
 import "./globals.css";
+
+
+const TgMiniApp = dynamic(() => {
+  return import('../components/TgMiniApp/TgMiniApp')
+}, {ssr: false});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,11 +33,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en"
+    suppressHydrationWarning
+    >
+      {/* <head>
+        <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+      </head> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        cz-shortcut-listen="true"
       >
         {children}
+        <Suspense>
+        <TgMiniApp/>
+        </Suspense>
       </body>
     </html>
   );
